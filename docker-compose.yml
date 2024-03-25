@@ -1,0 +1,23 @@
+services:
+  app:
+    image: node:20
+    environment:
+      - NODE_ENV=development
+      - VIRTUAL_HOST
+      - VIRTUAL_PORT=5173
+    volumes:
+      - .:/srv/app
+    networks:
+      - nginx-proxy
+    expose:
+      - 5173
+    user: node
+    working_dir: /srv/app
+    command: sh -c "npm run dev"
+
+networks:
+  nginx-proxy:
+    external: true
+
+# Since https is required for service-worker to work, a reverse proxy that can provide https is needed.
+# This sample assumes connections to nginx-proxy/nginx-proxy and nginx-proxy/acme-companion.
